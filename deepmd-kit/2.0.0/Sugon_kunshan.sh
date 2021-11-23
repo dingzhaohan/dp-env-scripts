@@ -19,9 +19,9 @@ EOF
 
 # ============= cmake 3 =============
 cd $home_dir/opt/lebesgue/Soft
-tar -zxvf cmake-3.17.2.tar.gz
-cd cmake-3.17.2
-./configure --prefix=$home_dir/opt/lebesgue/software/cmake_3.17.2_cpu_dpt
+tar -zxvf cmake-3.17.0.tar.gz
+cd cmake-3.17.0
+./configure --prefix=$home_dir/opt/lebesgue/software/cmake_3.17.0_cpu_dpt
 make -j && make install
 
 
@@ -48,6 +48,8 @@ cd source
 mkdir build && cd build
 
 # ============= lammps =============
+
+
 
 
 
