@@ -46,7 +46,10 @@ git checkout v2.0.0
 
 source $home/opt/lebesgue/software/deepmd-kit_2.0.0_dcu_dpt/bin/activate
 pip install $home/opt/lebesgue/Soft/tensorflow-2.2.0rc2-cp36-cp36m-linux_x86_64.whl -i https://pypi.tuna.tsinghua.edu.cn/simple
-pip install .
+module unload compiler/rocm/2.9
+module load compiler/rocm/3.3
+export DP_VARIANT=rocm
+pip install . -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 
 deepmd_source_dir=`pwd`
@@ -60,9 +63,11 @@ mkdir build && cd build
 module purge
 module load compiler/intel/oneapi-2021.3
 module load compiler/rocm/2.9
-source $home/opt/lebesgue/env/cmake_3.17.0_cpu_dpt.env
+module laod compiler/cmake/3.17.2
+# source $home/opt/lebesgue/env/cmake_3.17.0_cpu_dpt.env
+
 # cmake -DTENSORFLOW_ROOT=$tensorflow_root -DCMAKE_INSTALL_PREFIX=$deepmd_root -DUSE_ROCM_TOOLKIT=TRUE ..
-cmake -DTENSORFLOW_ROOT=$tensorflow_root -DCMAKE_INSTALL_PREFIX=$deepmd_root -DUSE_ROCM_TOOLKIT=TRUE -DLAMMPS_VERSION_NUMBER=20210702 -DLAMMPS_SOURCE_ROOT=$home/opt/lebesgue/Soft/lammps-2Jul2021 ..
+cmake -DTENSORFLOW_ROOT=$tensorflow_root -DCMAKE_INSTALL_PREFIX=$deepmd_root -DUSE_ROCM_TOOLKIT=TRUE -DLAMMPS_VERSION_NUMBER=20210702 -DLAMMPS_SOURCE_ROOT=$home/opt/lebesgue/Soft/lammps-2Jul2021 -DROCM_ROOT=/opt/rocm ..
 
 make -j && make install -j
 ls $deepmd_root/lib
@@ -75,6 +80,7 @@ cp -r USER-DEEPMD $home/opt/lebesgue/Soft/lammps-2Jul2021/src
 cd $home/opt/lebesgue/Soft/lammps-2Jul2021/src
 make yes-kspace
 make yes-manybody
+make yes-meam
 make yes-user-deepmd
 make serial -j
 make mpi -j
